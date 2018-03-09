@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Wsip</string>
+    <string name="passwordHint">password</string>
+    <string name="usernameHint">username</string>
+    <string name="login_in">Zaloguj</string>
+    <string name="remeber_me">Zapamiętaj mnie</string>
+</resources>
