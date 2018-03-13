@@ -16,6 +16,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "api"
+
+    productFlavors {
+
+        dev {
+            buildConfigField "String", "API_URL", "\"http://217.67.221.21:8082/api/MobileMock/\""
+            dimension "api"
+        }
+
+        prod {
+            buildConfigField "String", "API_URL", "\"http://217.67.221.21:8082/api/MobileMock/\""
+            dimension "api"
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -61,5 +82,13 @@ dependencies {
     //Arch Components
     implementation "android.arch.lifecycle:extensions:1.1.0"
 
+    //AutoValue
+    compileOnly "com.google.auto.value:auto-value:1.5.3"
+    annotationProcessor "com.google.auto.value:auto-value:1.5.3"
 
+    //RecyclerView
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+
+    //support design
+    compile 'com.android.support:design:26.1.0'
 }

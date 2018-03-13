@@ -2,12 +2,14 @@ package com.netwise.wsip.presentation.login;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.netwise.wsip.R;
+import com.netwise.wsip.presentation.crm.CrmActivity;
 
 import javax.inject.Inject;
 
@@ -34,16 +36,20 @@ public class LoginActivity extends DaggerAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
-
         ButterKnife.bind(this);
-
     }
 
     @OnClick(R.id.login_in)
-    public void onLoginClick(){
-        statusTextView.setText("dummy text");
+    public void onLoginClick() {
+        statusTextView.setText("go to crm activity");
         statusTextView.setVisibility(View.VISIBLE);
+
+        Bundle crmBundle = CrmActivity.createExtraData("The choosen one");
+
+        Intent intent = new Intent(this, CrmActivity.class);
+        intent.putExtras(crmBundle);
+
+        startActivity(intent);
     }
 }
