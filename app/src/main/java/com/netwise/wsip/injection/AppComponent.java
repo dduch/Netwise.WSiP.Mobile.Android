@@ -5,6 +5,8 @@ import android.app.Application;
 import com.netwise.wsip.WsipApp;
 import com.netwise.wsip.injection.network.ApiModule;
 import com.netwise.wsip.injection.network.NetworkModule;
+import com.netwise.wsip.presentation.attachmentSender.AttachementSenderModule;
+import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderBuilder;
 import com.netwise.wsip.presentation.crm.CrmBuilder;
 import com.netwise.wsip.presentation.fake.FakeBuilder;
 import com.netwise.wsip.presentation.login.LoginBuilder;
@@ -25,7 +27,9 @@ import dagger.android.support.AndroidSupportInjectionModule;
         CrmBuilder.class,
         ApiModule.class,
         NetworkModule.class,
-        RepositoryModule.class
+        RepositoryModule.class,
+        AttachementSenderModule.class,
+        AttachmentSenderBuilder.class
     }
 )
 public interface AppComponent {

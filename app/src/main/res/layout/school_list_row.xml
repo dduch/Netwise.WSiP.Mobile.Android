@@ -1,27 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/school_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:textSize="20sp"/>
+        android:textSize="24sp"
+        android:textColor="@color/NameTextColor"/>
 
     <TextView
-        android:id="@+id/school_name"
+        android:id="@+id/school_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_name"/>
 
     <TextView
         android:id="@+id/school_street1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_type"/>
+
+    <TextView
+        android:id="@+id/school_street2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_street1"/>
+
+    <TextView
+        android:id="@+id/school_postcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_street2"/>
+
+    <TextView
+        android:id="@+id/school_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_postcode"/>
+
+    <TextView
+        android:id="@+id/school_province"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/DetailsTextColor"
+        app:layout_constraintTop_toBottomOf="@id/school_province"/>
 
 </android.support.constraint.ConstraintLayout>

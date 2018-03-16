@@ -6,8 +6,4 @@ package com.netwise.wsip.domain.crm;
 
 public class NoteHeader {
     public String name;
-
-    public NoteHeader(String name) {
-        this.name = name;
-    }
 }

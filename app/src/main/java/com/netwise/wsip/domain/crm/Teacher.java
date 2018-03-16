@@ -6,8 +6,11 @@ package com.netwise.wsip.domain.crm;
 
 public class Teacher {
     public String firstName;
-
-    public Teacher(String firstName) {
-        this.firstName = firstName;
-    }
+    public String lastName;
+    public String mainSchoolName;
+    public String street1;
+    public String street2;
+    public String city;
+    public String postalCodeName;
+    public String provinceName;
 }

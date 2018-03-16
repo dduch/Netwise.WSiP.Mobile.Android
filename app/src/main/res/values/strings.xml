@@ -4,8 +4,16 @@
     <string name="usernameHint">username</string>
     <string name="login_in">Zaloguj</string>
     <string name="remeber_me">Zapamiętaj mnie</string>
+    <string name="takePhoto">Zrób zdjęcie</string>
     <string name="API_URL"></string>
     <string name="schoolTab">Szkoły</string>
     <string name="teacherTab">Nauczyciele</string>
-    <string name="takePhoto">Zrób zdjęcie</string>
+    <string name="button_allow">Zgoda</string>
+    <string name="button_deny">Odmowa</string>
+    <string name="permission_camera_denied">Brak zgody na użycie kamery</string>
+    <string name="permission_camera_neverask">Nie pytaj więcej o zgode</string>
+    <string name="permission_camera_rationale">Wymagana zgoda na użycie kamery</string>
+    <string name="attachmentName">Nazwa załącznika</string>
+    <string name="attachmentContent">Zawartość notatki</string>
+    <string name="sendAttachmentButton">Wyślij załącznik</string>
 </resources>

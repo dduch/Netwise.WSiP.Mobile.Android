@@ -44,12 +44,7 @@ public class LoginActivity extends DaggerAppCompatActivity {
     public void onLoginClick() {
         statusTextView.setText("go to crm activity");
         statusTextView.setVisibility(View.VISIBLE);
-
-        Bundle crmBundle = CrmActivity.createExtraData("The choosen one");
-
         Intent intent = new Intent(this, CrmActivity.class);
-        intent.putExtras(crmBundle);
-
         startActivity(intent);
     }
 }

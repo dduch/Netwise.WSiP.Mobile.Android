@@ -1,7 +1,5 @@
 package com.netwise.wsip.presentation.crm;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,13 +11,9 @@ import android.view.ViewGroup;
 
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
-import com.netwise.wsip.presentation.crm.adapter.RVAdapter;
+import com.netwise.wsip.presentation.crm.adapter.SchoolAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import javax.inject.Inject;
 
 /**
  * Created by dawido on 13.03.2018.
@@ -28,8 +22,7 @@ import javax.inject.Inject;
 public class SchoolFragment extends Fragment {
     private CrmViewModel viewModel;
     private RecyclerView recyclerview;
-    private List<School> schoolModel;
-    private RVAdapter adapter;
+    private SchoolAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +45,10 @@ public class SchoolFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        adapter = new RVAdapter();
+        adapter = new SchoolAdapter(viewModel.viewState().getValue().schools());
         recyclerview.setAdapter(adapter);
+        viewModel.viewState().observe(this,  CrmViewState -> adapter.setSchoolPresentationModel(CrmViewState.schools()));
+        adapter.notifyDataSetChanged();
     }
 
 }

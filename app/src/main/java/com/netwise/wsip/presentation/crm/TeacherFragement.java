@@ -11,22 +11,19 @@ import android.view.ViewGroup;
 
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
-import com.netwise.wsip.presentation.crm.adapter.RVAdapter;
+import com.netwise.wsip.presentation.crm.adapter.SchoolAdapter;
+import com.netwise.wsip.presentation.crm.adapter.TeacherAdapter;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Created by dawido on 13.03.2018.
  */
 
 public class TeacherFragement extends Fragment {
-    CrmViewModel viewModel;
-
+    private CrmViewModel viewModel;
     private RecyclerView recyclerview;
-    private List<School> schoolModel;
-    private RVAdapter adapter;
+    private TeacherAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +46,8 @@ public class TeacherFragement extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-
-        adapter = new RVAdapter();
+        adapter = new TeacherAdapter(viewModel.viewState().getValue().teachers());
         recyclerview.setAdapter(adapter);
+        viewModel.viewState().observe(this,  CrmViewState -> adapter.setTeacherPresentationModel(CrmViewState.teachers()));
     }
 }

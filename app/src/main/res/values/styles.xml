@@ -6,9 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-
+    <color name="NameTextColor">#FF00008B</color>
+    <color name="DetailsTextColor">#FF696969</color>
 
     <style name="loginActivityEditText">
         <item name="android:textSize">@dimen/loginActivityEditTextSize</item>
