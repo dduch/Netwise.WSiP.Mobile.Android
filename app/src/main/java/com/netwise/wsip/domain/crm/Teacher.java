@@ -1,5 +1,9 @@
 package com.netwise.wsip.domain.crm;
 
+import com.netwise.wsip.infastucture.network.ResponseDto;
+
+import java.util.List;
+
 /**
  * Created by dawido on 13.03.2018.
  */
@@ -13,4 +17,5 @@ public class Teacher {
     public String city;
     public String postalCodeName;
     public String provinceName;
+    public String itemId;
 }

@@ -3,6 +3,8 @@ package com.netwise.wsip.presentation.crm.adapter;
 /**
  * Created by dawido on 13.03.2018.
  */
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,11 +12,17 @@ import android.widget.TextView;
 
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
+import com.netwise.wsip.domain.crm.Teacher;
+import com.netwise.wsip.presentation.crm.CrmActivity;
+import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersActivity;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class SchoolViewHolder extends RecyclerView.ViewHolder {
+public class SchoolViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
     @BindView(R.id.school_name)
     TextView schoolName;
@@ -37,6 +45,9 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.school_province)
     TextView province;
 
+    String itemId;
+    List<Teacher> teachers;
+
     public SchoolViewHolder(View itemView) {
         super(itemView);
         itemView.setClickable(true);
@@ -50,6 +61,8 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder {
         street2.setText(schoolModel.street2);
         city.setText(schoolModel.city);
         province.setText(schoolModel.provinceName);
+        itemId = schoolModel.itemId;
+        teachers = schoolModel.teachers;
     }
 
     public void setVisibility() {
@@ -80,6 +93,23 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder {
         if (TextUtils.isEmpty(postcode.getText())) {
             postcode.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.detailsButton)
+    @Override
+    public void onClick(View v) {
+        School school = new School();
+        school.itemId = itemId;
+        school.teachers = this.teachers;
+        Bundle bundle = SchoolTeachersActivity.createExtraData(school);
+        Intent intent = new Intent(v.getContext(), SchoolTeachersActivity.class);
+        intent.putExtras(bundle);
+        v.getContext().startActivity(intent);
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        return false;
     }
 }
 

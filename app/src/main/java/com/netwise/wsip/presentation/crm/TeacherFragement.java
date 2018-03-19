@@ -11,10 +11,14 @@ import android.view.ViewGroup;
 
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
+import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.presentation.crm.adapter.SchoolAdapter;
 import com.netwise.wsip.presentation.crm.adapter.TeacherAdapter;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by dawido on 13.03.2018.
@@ -22,12 +26,15 @@ import java.util.List;
 
 public class TeacherFragement extends Fragment {
     private CrmViewModel viewModel;
-    private RecyclerView recyclerview;
     private TeacherAdapter adapter;
+
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.bind(getActivity());
         viewModel = ViewModelProviders.of(getActivity()).get(CrmViewModel.class);
     }
 
@@ -36,9 +43,11 @@ public class TeacherFragement extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab_fragment, container, false);
-        recyclerview = view.findViewById(R.id.recyclerview);
+        ButterKnife.bind(this, view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerview.setLayoutManager(layoutManager);
+        if(recyclerView != null){
+            recyclerView.setLayoutManager(layoutManager);
+        }
         return view;
     }
 
@@ -47,7 +56,7 @@ public class TeacherFragement extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
         adapter = new TeacherAdapter(viewModel.viewState().getValue().teachers());
-        recyclerview.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
         viewModel.viewState().observe(this,  CrmViewState -> adapter.setTeacherPresentationModel(CrmViewState.teachers()));
     }
 }

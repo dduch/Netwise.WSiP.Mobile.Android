@@ -10,6 +10,8 @@ import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderBuilder;
 import com.netwise.wsip.presentation.crm.CrmBuilder;
 import com.netwise.wsip.presentation.fake.FakeBuilder;
 import com.netwise.wsip.presentation.login.LoginBuilder;
+import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersBuilder;
+import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersModule;
 
 import javax.inject.Singleton;
 
@@ -29,7 +31,9 @@ import dagger.android.support.AndroidSupportInjectionModule;
         NetworkModule.class,
         RepositoryModule.class,
         AttachementSenderModule.class,
-        AttachmentSenderBuilder.class
+        AttachmentSenderBuilder.class,
+        SchoolTeachersModule.class,
+        SchoolTeachersBuilder.class
     }
 )
 public interface AppComponent {

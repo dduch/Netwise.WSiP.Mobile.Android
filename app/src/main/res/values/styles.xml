@@ -3,10 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/Wsip_base_color</item>
+        <item name="colorPrimaryDark">@color/Wsip_base_color</item>
+        <item name="colorAccent">@color/wsip_accent_color</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <color name="NameTextColor">#FF00008B</color>
@@ -16,5 +17,15 @@
         <item name="android:textSize">@dimen/loginActivityEditTextSize</item>
         <item name="android:padding">@dimen/basePadding</item>
     </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the "underline" in the text -->
+        <item name="queryBackground">@color/white</item>
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <item name="queryHint">@string/search_hint</item>
+    </style>
+
 
 </resources>

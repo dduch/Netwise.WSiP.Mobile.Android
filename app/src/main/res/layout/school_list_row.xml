@@ -1,69 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/border"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
 
     <TextView
         android:id="@+id/school_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="@color/NameTextColor"/>
+        android:textColor="@color/NameTextColor"
+        android:textSize="20sp"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_name"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_name"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_street1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_type"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_type"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_street2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_street1"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_street1"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_postcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_street2"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_street2"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_postcode"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_postcode"
+        android:paddingLeft="10dp"/>
 
     <TextView
         android:id="@+id/school_province"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:textColor="@color/DetailsTextColor"
-        app:layout_constraintTop_toBottomOf="@id/school_province"/>
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/school_province"
+        android:paddingLeft="10dp"/>
+
+    <ImageButton
+        android:id="@+id/detailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/details"
+        android:orientation="@+id/details"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

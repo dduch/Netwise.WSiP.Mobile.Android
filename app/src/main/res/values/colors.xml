@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="Wsip_base_color">#0069b3</color>
+    <color name="wsip_accent_color">#28c31a</color>
+    <color name="wsip_accent_color_light">#B3ECB7</color>
+    <color name="white">#ffffff</color>
 </resources>

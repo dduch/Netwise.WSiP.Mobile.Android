@@ -33,6 +33,8 @@ public class ModelMapper {
             school.postalCode = schoolDto.PostalCodeName;
             school.city = schoolDto.City;
             school.provinceName = schoolDto.ProvinceName;
+            school.itemId = schoolDto.Id;
+            school.teachers = mapTeachers(schoolDto.teachers);
             schools.add(school);
         }
         return  schools;
@@ -50,6 +52,7 @@ public class ModelMapper {
             teacher.city = teacherDto.City;
             teacher.mainSchoolName = teacherDto.MainSchoolName;
             teacher.provinceName = teacherDto.ProvinceName;
+            teacher.itemId = teacherDto.Id;
             teachers.add(teacher);
         }
         return  teachers;
