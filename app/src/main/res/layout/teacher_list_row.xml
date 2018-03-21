@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
-    android:background="@drawable/border"
     android:clickable="true"
     android:focusableInTouchMode="true"
     android:focusable="true"
@@ -12,7 +11,8 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp">
+    android:layout_marginRight="5dp"
+    android:background="@drawable/border">
 
     <TextView
         android:id="@+id/teacher_firstName"

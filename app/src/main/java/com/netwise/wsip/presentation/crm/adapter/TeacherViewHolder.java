@@ -17,7 +17,7 @@ import com.netwise.wsip.domain.crm.Teacher;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TeacherViewHolder extends RecyclerView.ViewHolder {
+public class TeacherViewHolder extends RecyclerView.ViewHolder{
 
     @BindView(R.id.teacher_firstName)
     TextView firstName;
@@ -92,4 +92,5 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder {
             province.setVisibility(View.GONE);
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package com.netwise.wsip.presentation.schoolTeachers;
 
 import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderActivity;
+import com.netwise.wsip.presentation.crm.CrmModule;
 import com.netwise.wsip.presentation.fake.FakeModule;
 
 import dagger.Module;
@@ -12,6 +13,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class SchoolTeachersBuilder {
-    @ContributesAndroidInjector(modules = {FakeModule.class})
+    @ContributesAndroidInjector(modules = {CrmModule.class})
     abstract SchoolTeachersActivity  schoolTeachersActivity ();
 }

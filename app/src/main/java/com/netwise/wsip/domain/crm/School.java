@@ -24,6 +24,7 @@ public class School implements Parcelable {
 
     public School(){}
 
+
     protected School(Parcel in) {
         name = in.readString();
         schoolTypeName = in.readString();
@@ -33,6 +34,25 @@ public class School implements Parcelable {
         city = in.readString();
         provinceName = in.readString();
         itemId = in.readString();
+        teachers = in.createTypedArrayList(Teacher.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(schoolTypeName);
+        dest.writeString(street1);
+        dest.writeString(street2);
+        dest.writeString(postalCode);
+        dest.writeString(city);
+        dest.writeString(provinceName);
+        dest.writeString(itemId);
+        dest.writeTypedList(teachers);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<School> CREATOR = new Creator<School>() {
@@ -46,21 +66,4 @@ public class School implements Parcelable {
             return new School[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(schoolTypeName);
-        parcel.writeString(street1);
-        parcel.writeString(street2);
-        parcel.writeString(postalCode);
-        parcel.writeString(city);
-        parcel.writeString(provinceName);
-        parcel.writeString(itemId);
-    }
 }

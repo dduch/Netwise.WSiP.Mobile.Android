@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
+import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.presentation.crm.adapter.SchoolAdapter;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
 
 public class SchoolFragment extends Fragment {
     private CrmViewModel viewModel;
-    private SchoolAdapter adapter;
+    public SchoolAdapter adapter;
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
@@ -44,7 +45,7 @@ public class SchoolFragment extends Fragment {
         View view = inflater.inflate(R.layout.tab_fragment, container, false);
         ButterKnife.bind(this, view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        if(recyclerView != null){
+        if (recyclerView != null) {
             recyclerView.setLayoutManager(layoutManager);
         }
         return view;
@@ -57,8 +58,7 @@ public class SchoolFragment extends Fragment {
         setHasOptionsMenu(true);
         adapter = new SchoolAdapter(viewModel.viewState().getValue().schools());
         recyclerView.setAdapter(adapter);
-        viewModel.viewState().observe(this,  CrmViewState -> adapter.setSchoolPresentationModel(CrmViewState.schools()));
+        viewModel.viewState().observe(this, CrmViewState -> adapter.setSchoolPresentationModel(CrmViewState.schools()));
         adapter.notifyDataSetChanged();
     }
-
 }

@@ -62,7 +62,6 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         viewModel = ViewModelProviders.of(this, vmFactory).get(CrmViewModel.class);
-        observeViewModel();
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -87,28 +86,19 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager, School school) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new TeacherFragement(), getResources().getString(R.string.teacherTab));
+        TeacherFragement teacherFragement = new TeacherFragement();
+        teacherFragement.setArguments(TeacherFragement.createExtraData(school));
+        adapter.addFragment(teacherFragement, school.name);
         viewPager.setAdapter(adapter);
     }
 
 
-    private void observeViewModel() {
-        viewModel.viewState().observe(this, this::handleViewState);
-    }
-
-    private void handleViewState(CrmViewState crmViewState) {
-        Toast.makeText(this, "Got new vs", Toast.LENGTH_LONG).show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Associate searchable configuration with the SearchView
         getMenuInflater().inflate(R.menu.menu_main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-        searchView.setSearchableInfo(searchManager
-                .getSearchableInfo(getComponentName()));
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
         return true;

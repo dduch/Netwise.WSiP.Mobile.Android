@@ -25,8 +25,9 @@ import butterknife.ButterKnife;
  */
 
 public class TeacherFragement extends Fragment {
+    private static String SCHOOL_DATA = "school";
     private CrmViewModel viewModel;
-    private TeacherAdapter adapter;
+    public TeacherAdapter adapter;
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
@@ -55,8 +56,20 @@ public class TeacherFragement extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        adapter = new TeacherAdapter(viewModel.viewState().getValue().teachers());
+        if(getArguments() != null && getArguments().getParcelable(SCHOOL_DATA) != null){
+            School school = getArguments().getParcelable(SCHOOL_DATA);
+            List<Teacher> teachers = school.teachers;
+            adapter = new TeacherAdapter(teachers);
+        }else{
+            adapter = new TeacherAdapter(viewModel.viewState().getValue().teachers());
+            viewModel.viewState().observe(this,  CrmViewState -> adapter.setTeacherPresentationModel(CrmViewState.teachers()));
+        }
         recyclerView.setAdapter(adapter);
-        viewModel.viewState().observe(this,  CrmViewState -> adapter.setTeacherPresentationModel(CrmViewState.teachers()));
+    }
+
+    public static Bundle createExtraData(School schoolDetails) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SCHOOL_DATA, schoolDetails);
+        return bundle;
     }
 }

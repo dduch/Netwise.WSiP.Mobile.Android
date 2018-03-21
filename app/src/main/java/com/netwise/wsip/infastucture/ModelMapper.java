@@ -53,6 +53,8 @@ public class ModelMapper {
             teacher.mainSchoolName = teacherDto.MainSchoolName;
             teacher.provinceName = teacherDto.ProvinceName;
             teacher.itemId = teacherDto.Id;
+            teacher.mobilePhone = teacherDto.MobilePhone;
+            teacher.email = teacherDto.Email;
             teachers.add(teacher);
         }
         return  teachers;

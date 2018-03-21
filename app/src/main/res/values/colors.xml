@@ -6,5 +6,6 @@
     <color name="Wsip_base_color">#0069b3</color>
     <color name="wsip_accent_color">#28c31a</color>
     <color name="wsip_accent_color_light">#B3ECB7</color>
+    <color name="wsip_accent_color_gray">#cce0ff</color>
     <color name="white">#ffffff</color>
 </resources>

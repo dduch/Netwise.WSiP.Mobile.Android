@@ -18,6 +18,5 @@
     <string name="sendAttachmentButton">Wyślij załącznik</string>
     <string name="action_settings">Settings</string>
     <string name="toolbar_title">Contacts</string>
-    <string name="search_hint">Szukaj..</string>
-    <string name="action_search">Wyszukaj</string>
+    <string name="search_hint">Wyszukaj...</string>
 </resources>
