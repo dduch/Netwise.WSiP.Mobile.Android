@@ -22,12 +22,12 @@ android {
     productFlavors {
 
         dev {
-            buildConfigField "String", "API_URL", "\"http://217.67.221.21:8082/api/MobileMock/\""
+            buildConfigField "String", "API_URL", "\"https://portalcrm.wsip.com.pl/\""
             dimension "api"
         }
 
         prod {
-            buildConfigField "String", "API_URL", "\"http://217.67.221.21:8082/api/MobileMock/\""
+            buildConfigField "String", "API_URL", "\"https://portalcrm.wsip.com.pl/\""
             dimension "api"
         }
 
@@ -85,6 +85,7 @@ dependencies {
 
     //RecyclerView
     compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
 
     //Expandable RecyclerView
     compile 'com.thoughtbot:expandablerecyclerview:1.3'
@@ -95,4 +96,19 @@ dependencies {
 
     //cardView
     compile 'com.android.support:cardview-v7:26.1.0'
+
+    //progress bar
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.github.rey5137:material:1.2.2'
+
+    //spinner
+    compile 'com.weiwangcn.betterspinner:library-material:1.1.0'
+
+    //paracamera
+    compile 'com.mindorks:paracamera:0.2.2'
+
+    //auto value gson
+    annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.7.0'
+    compile 'com.ryanharter.auto.value:auto-value-gson-annotations:0.7.0'
+
 }

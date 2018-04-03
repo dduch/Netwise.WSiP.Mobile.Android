@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkModule {
     @Singleton
     @Provides
-    HttpLoggingInterceptor privideLoggingInterceptor() {
+    HttpLoggingInterceptor provideLoggingInterceptor() {
         return new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
@@ -27,7 +27,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    Converter.Factory provideJsonConverterFacgtory() {
+    Converter.Factory provideJsonConverterFactory() {
         return GsonConverterFactory.create();
     }
 

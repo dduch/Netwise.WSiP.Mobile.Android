@@ -1,6 +1,5 @@
 package com.netwise.wsip.domain.crm;
 
-
 import java.util.List;
 
 //shift + f6

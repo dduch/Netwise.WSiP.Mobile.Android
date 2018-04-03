@@ -12,8 +12,7 @@ import java.util.List;
  */
 
 public class Teacher implements Parcelable {
-    public String firstName;
-    public String lastName;
+    public String fullName;
     public String mainSchoolName;
     public String street1;
     public String street2;
@@ -23,12 +22,12 @@ public class Teacher implements Parcelable {
     public String itemId;
     public String email;
     public String mobilePhone;
+    public String crmEntityName;
 
     public Teacher(){}
 
     protected Teacher(Parcel in) {
-        firstName = in.readString();
-        lastName = in.readString();
+        fullName = in.readString();
         mainSchoolName = in.readString();
         street1 = in.readString();
         street2 = in.readString();
@@ -38,12 +37,12 @@ public class Teacher implements Parcelable {
         itemId = in.readString();
         email = in.readString();
         mobilePhone = in.readString();
+        crmEntityName = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(firstName);
-        dest.writeString(lastName);
+        dest.writeString(fullName);
         dest.writeString(mainSchoolName);
         dest.writeString(street1);
         dest.writeString(street2);
@@ -53,6 +52,7 @@ public class Teacher implements Parcelable {
         dest.writeString(itemId);
         dest.writeString(email);
         dest.writeString(mobilePhone);
+        dest.writeString(crmEntityName);
     }
 
     @Override

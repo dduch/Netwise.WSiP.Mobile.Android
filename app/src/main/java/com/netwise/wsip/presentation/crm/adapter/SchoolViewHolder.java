@@ -3,12 +3,20 @@ package com.netwise.wsip.presentation.crm.adapter;
 /**
  * Created by dawido on 13.03.2018.
  */
+import android.bluetooth.le.AdvertiseData;
+import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.test.ServiceTestCase;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.netwise.wsip.R;
@@ -17,14 +25,19 @@ import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.presentation.crm.CrmActivity;
 import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersActivity;
 
+import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-public class SchoolViewHolder extends RecyclerView.ViewHolder{
+import static java.security.AccessController.getContext;
+
+public class SchoolViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private Context context;
 
     @BindView(R.id.school_name)
     TextView schoolName;
@@ -47,13 +60,23 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.school_province)
     TextView province;
 
+    @BindView(R.id.selectedCheckbox)
+    CheckBox isSelected;
+
+    @BindView(R.id.card_view)
+    CardView cardView;
+
     String itemId;
     List<Teacher> teachers;
+    SchoolAdapter adapter;
 
-    public SchoolViewHolder(View itemView) {
+    public SchoolViewHolder(View itemView, SchoolAdapter parentAdapter) {
         super(itemView);
         itemView.setClickable(true);
+        context = itemView.getContext();
         ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(this);
+        adapter = parentAdapter;
     }
 
     public void bind(School schoolModel) {
@@ -62,9 +85,11 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder{
         street1.setText(schoolModel.street1);
         street2.setText(schoolModel.street2);
         city.setText(schoolModel.city);
+        postcode.setText(schoolModel.postalCode);
         province.setText(schoolModel.provinceName);
         itemId = schoolModel.itemId;
         teachers = schoolModel.teachers;
+        setVisibility();
     }
 
     public void setVisibility() {
@@ -92,8 +117,8 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder{
             postcode.setVisibility(View.GONE);
         }
 
-        if (TextUtils.isEmpty(postcode.getText())) {
-            postcode.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(province.getText())) {
+            province.setVisibility(View.GONE);
         }
     }
 
@@ -107,6 +132,24 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder{
         Intent intent = new Intent(v.getContext(), SchoolTeachersActivity.class);
         intent.putExtras(bundle);
         v.getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View view) {
+        this.isSelected.setChecked(true);
+    }
+
+    @OnCheckedChanged(R.id.selectedCheckbox)
+    public void onChexkBoxChnage(){
+        setSelection();
+    }
+
+    private void setSelection(){
+        if(this.isSelected.isChecked()){
+            this.cardView.setCardBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.wsip_accent_color_light, null));
+        }
+        adapter.unselectHolder();
+        adapter.selectedPos = getAdapterPosition();
     }
 }
 

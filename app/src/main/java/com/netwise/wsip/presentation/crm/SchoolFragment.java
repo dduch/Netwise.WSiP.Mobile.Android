@@ -10,16 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.netwise.wsip.R;
-import com.netwise.wsip.domain.crm.School;
-import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.presentation.crm.adapter.SchoolAdapter;
-
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by dawido on 13.03.2018.
@@ -30,7 +25,13 @@ public class SchoolFragment extends Fragment {
     public SchoolAdapter adapter;
 
     @BindView(R.id.recyclerview)
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
+
+    @BindView(R.id.fastscroll)
+    FastScroller fastScroller;
+
+    @BindView(R.id.empty_view)
+    TextView emptyView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,16 @@ public class SchoolFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-        adapter = new SchoolAdapter(viewModel.viewState().getValue().schools());
+        adapter = new SchoolAdapter(viewModel.viewState().getValue().schools(), this);
         recyclerView.setAdapter(adapter);
+        fastScroller.setRecyclerView(recyclerView);
         viewModel.viewState().observe(this, CrmViewState -> adapter.setSchoolPresentationModel(CrmViewState.schools()));
         adapter.notifyDataSetChanged();
+    }
+
+    public void setMessageVisibility(int vis){
+        emptyView.setText(getContext().getResources().getString(R.string.no_data_available));
+        emptyView.setTextColor(getContext().getResources().getColor(R.color.Wsip_base_color));
+        emptyView.setVisibility(vis);
     }
 }

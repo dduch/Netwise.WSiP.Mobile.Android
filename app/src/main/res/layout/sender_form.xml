@@ -3,46 +3,117 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/attachmentType"
-        android:layout_marginTop="40dp"
+    <LinearLayout
+        android:padding="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        android:orientation="vertical" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/attachmentType"
+        android:id="@+id/atatchemntTypeHeader"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>
+
+    <Spinner
+        android:padding="12dp"
+        android:id="@+id/attachmentType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toTopOf="@id/atatchemntTypeHeader"
+        android:layout_marginTop="20dp"
+        />
 
     <EditText
+        android:padding="12dp"
         android:id="@+id/attachmentName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintTop_toBottomOf="@id/attachmentType"
+        android:textColor="@color/Wsip_base_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/attachmentName" />
+        app:layout_constraintTop_toBottomOf="@id/attachmentType"
+        android:hint="@string/attachmentName"
+        android:layout_marginTop="20dp"/>
 
     <EditText
+        android:padding="12dp"
         android:id="@+id/attachmentContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="20dp"
         android:maxLines="5"
-        android:lines="5"
-        app:layout_constraintTop_toBottomOf="@id/attachmentName"
+        android:src="@mipmap/ic_launcher"
+        android:textColor="@color/Wsip_base_color"
+        android:hint="@string/attachmentContentDes"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/attachmentContent" />
+        app:layout_constraintTop_toBottomOf="@id/attachmentName"/>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/progressLayout"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/attachmentContent"
+        app:layout_constraintBottom_toTopOf="@id/sendButton"
+        android:layout_margin="20dp">
+
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressStyle="@style/CustomProgressStyle"
+            app:pv_progressMode="indeterminate"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:indeterminate="false"/>
+
+        <TextView
+            android:id="@+id/progressInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/uploading_in_progress"
+            android:textAlignment="center"
+            android:textColor="@color/progressInfoColor"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"/>
+    </android.support.constraint.ConstraintLayout>
 
     <Button
-        android:text="@string/sendAttachmentButton"
+        android:padding="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/Wsip_base_color"
+        android:id="@+id/sendButton"
+        android:text="@string/sendAttachmentButton"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 

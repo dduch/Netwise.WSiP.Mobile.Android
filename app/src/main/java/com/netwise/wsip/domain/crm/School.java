@@ -20,6 +20,7 @@ public class School implements Parcelable {
     public String city;
     public String provinceName;
     public String itemId;
+    public String crmEntityName;
     public List<Teacher> teachers;
 
     public School(){}
@@ -35,6 +36,7 @@ public class School implements Parcelable {
         provinceName = in.readString();
         itemId = in.readString();
         teachers = in.createTypedArrayList(Teacher.CREATOR);
+        crmEntityName = in.readString();
     }
 
     @Override
@@ -48,6 +50,7 @@ public class School implements Parcelable {
         dest.writeString(provinceName);
         dest.writeString(itemId);
         dest.writeTypedList(teachers);
+        dest.writeString(crmEntityName);
     }
 
     @Override

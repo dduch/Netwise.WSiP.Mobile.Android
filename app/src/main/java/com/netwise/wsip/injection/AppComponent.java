@@ -39,10 +39,9 @@ import dagger.android.support.AndroidSupportInjectionModule;
 public interface AppComponent {
 
     @Component.Builder
-    public interface Builder {
+     interface Builder {
         @BindsInstance
         Builder application(Application application);
-
         AppComponent build();
     }
 

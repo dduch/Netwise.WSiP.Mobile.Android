@@ -2,6 +2,8 @@ package com.netwise.wsip.presentation.schoolTeachers;
 
 import android.arch.lifecycle.ViewModel;
 
+import com.netwise.wsip.domain.crm.CrmRepository;
+
 import javax.inject.Inject;
 
 /**
@@ -10,7 +12,10 @@ import javax.inject.Inject;
 
 public class SchoolTeachersViewModel extends ViewModel {
 
+    private final CrmRepository crmRepository;
+
     @Inject
-    public SchoolTeachersViewModel() {
+    public SchoolTeachersViewModel(CrmRepository repository) {
+        this.crmRepository = repository;
     }
 }

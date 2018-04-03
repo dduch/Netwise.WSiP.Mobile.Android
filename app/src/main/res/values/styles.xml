@@ -27,5 +27,32 @@
         <item name="queryHint">@string/search_hint</item>
     </style>
 
+    <style name="CustomProgressStyle" parent="@style/Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/progressInfoColor</item>
+    </style>
 
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/wsip_accent_color</item>
+        <item name="android:colorBackground">@color/Wsip_base_color</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="StyledScrollerTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+    </style>
+
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">18dp</item>
+    </style>
 </resources>

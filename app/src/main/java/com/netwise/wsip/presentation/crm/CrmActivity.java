@@ -9,24 +9,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Switch;
 import android.widget.Toast;
 
+import com.mindorks.paracamera.Camera;
 import com.netwise.wsip.R;
+import com.netwise.wsip.domain.crm.CameraHelper;
+import com.netwise.wsip.domain.crm.School;
+import com.netwise.wsip.domain.crm.Teacher;
+import com.netwise.wsip.domain.crm.Attachment;
 import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderActivity;
 import com.netwise.wsip.presentation.crm.adapter.ViewPagerAdapter;
-import com.netwise.wsip.presentation.crm.filtering.RxSearch;
 
-import java.util.concurrent.TimeUnit;
+import java.io.ByteArrayOutputStream;
 
 import javax.inject.Inject;
 
@@ -42,11 +42,13 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class CrmActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private SearchView searchView = null;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private SchoolFragment schoolFragment;
     private TeacherFragement teacherFragement;
+
 
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
@@ -63,6 +65,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewModel = ViewModelProviders.of(this, vmFactory).get(CrmViewModel.class);
         observeViewModel();
@@ -71,6 +74,12 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -118,21 +127,11 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
 
     @NeedsPermission(Manifest.permission.CAMERA)
     void showCamera() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        try {
+            CameraHelper.getCamera(this).takePicture();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
-    }
-
-
-    @OnPermissionDenied(Manifest.permission.CAMERA)
-    void showDeniedForCamera() {
-        Toast.makeText(this, R.string.permission_camera_denied, Toast.LENGTH_SHORT).show();
-    }
-
-    @OnNeverAskAgain(Manifest.permission.CAMERA)
-    void showNeverAskForCamera() {
-        Toast.makeText(this, R.string.permission_camera_neverask, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -145,13 +144,43 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Bundle attachmentSenderBundle = AttachmentSenderActivity.createExtraData(imageBitmap);
-            Intent intent = new Intent(this, AttachmentSenderActivity.class);
-            intent.putExtras(attachmentSenderBundle);
-            startActivity(intent);
+            Bitmap imageBitmap = CameraHelper.getCamera().getCameraBitmap();
+            if(imageBitmap != null){
+                Attachment attachementData = getAttchmentData();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+                this.viewModel.addImageDataToRepo(stream.toByteArray().clone());
+                Bundle attachmentSenderBundle = AttachmentSenderActivity.createExtraData(attachementData);
+                Intent intent = new Intent(this, AttachmentSenderActivity.class);
+                intent.putExtras(attachmentSenderBundle);
+                CameraHelper.getCamera().deleteImage();
+                startActivity(intent);
+            }
         }
+    }
+
+    private Attachment getAttchmentData(){
+        Attachment attachmentData = new Attachment();
+        int currentTab = viewPager.getCurrentItem();
+        if(currentTab == 0){
+            if(schoolFragment != null){
+                int selectedSchool = schoolFragment.adapter.selectedPos;
+                School school = schoolFragment.adapter.getSchoolPresentationModel().get(selectedSchool);
+                attachmentData.crmEntityName = getResources().getString(R.string.crm_school_entity_name);
+                attachmentData.id = school.itemId;
+            }
+        }
+        else if(currentTab == 1) {
+            if(teacherFragement != null){
+                int selectedTeacher = teacherFragement.adapter.selectedPos;
+                Teacher teacher = teacherFragement.adapter.getTeacherPresentationModel().get(selectedTeacher);
+                attachmentData.crmEntityName = getResources().getString(R.string.crm_techer_entity_name);
+                attachmentData.id = teacher.itemId;
+            }
+        }
+
+        return  attachmentData;
     }
 
     @Override
@@ -161,9 +190,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
 
     @Override
     public boolean onQueryTextChange(String newText) {
-
         int currentTab = viewPager.getCurrentItem();
-
         if(currentTab == 0){
             if(schoolFragment != null){
                 schoolFragment.adapter.getFilter().filter(newText);

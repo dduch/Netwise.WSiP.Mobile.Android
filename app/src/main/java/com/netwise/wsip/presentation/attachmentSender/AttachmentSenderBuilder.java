@@ -1,5 +1,6 @@
 package com.netwise.wsip.presentation.attachmentSender;
 
+import com.netwise.wsip.presentation.crm.CrmModule;
 import com.netwise.wsip.presentation.fake.FakeActivity;
 import com.netwise.wsip.presentation.fake.FakeModule;
 
@@ -12,6 +13,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class AttachmentSenderBuilder {
-    @ContributesAndroidInjector(modules = {FakeModule.class})
+    @ContributesAndroidInjector(modules = {CrmModule.class})
     abstract AttachmentSenderActivity attachmentSenderActivity();
 }

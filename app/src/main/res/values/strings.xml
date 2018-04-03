@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Wsip</string>
-    <string name="passwordHint">password</string>
-    <string name="usernameHint">username</string>
+    <string name="app_name">CRM Photo Sender</string>
+    <string name="passwordHint">Login</string>
+    <string name="usernameHint">Hasło</string>
     <string name="login_in">Zaloguj</string>
     <string name="remeber_me">Zapamiętaj mnie</string>
     <string name="takePhoto">Zrób zdjęcie</string>
@@ -14,9 +14,24 @@
     <string name="permission_camera_neverask">Nie pytaj więcej o zgode</string>
     <string name="permission_camera_rationale">Wymagana zgoda na użycie kamery</string>
     <string name="attachmentName">Nazwa załącznika</string>
-    <string name="attachmentContent">Zawartość notatki</string>
+    <string name="attachmentType">Typ załącznika</string>
+    <string name="attachmentContentDes">Zawartość notatki</string>
     <string name="sendAttachmentButton">Wyślij załącznik</string>
     <string name="action_settings">Settings</string>
     <string name="toolbar_title">Contacts</string>
     <string name="search_hint">Wyszukaj...</string>
+    <string name="no_data_available">Brak danych do wyświetlenia</string>
+    <string name="log_in_progress">Logowanie...</string>
+    <string name="data_loading_in_progress">Pobieranie danych...</string>
+    <string name="error_header">Błąd</string>
+    <string name="success_header">Sukces</string>
+    <string name="error_login">Błąd podczas logowania</string>
+    <string name="ok_button">OK</string>
+    <string name="uploading_in_progress">Wysyłanie załącznika...</string>
+    <string name="upload_succeed">Załącznik wysłany do CRM</string>
+    <string name="upload_error">Błąd podczas wysyłki załącznika</string>
+    <string name="logging_error">Błąd podczas logowania</string>
+    <string name="crm_school_entity_name">account</string>
+    <string name="crm_techer_entity_name">contact</string>
+    <string name="server_timeout">Błąd połączenia - serwer nie odpowiada</string>
 </resources>

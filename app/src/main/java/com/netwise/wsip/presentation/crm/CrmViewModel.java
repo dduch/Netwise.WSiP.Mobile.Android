@@ -5,11 +5,17 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.netwise.wsip.domain.crm.CrmRepository;
+import com.netwise.wsip.domain.crm.NoteHeader;
+import com.netwise.wsip.infastucture.network.AttachmentRequestDto;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import okhttp3.ResponseBody;
 
 public class CrmViewModel extends ViewModel {
     private CrmRepository crmRepository;
@@ -49,7 +55,21 @@ public class CrmViewModel extends ViewModel {
     public void clear() {
         disposables.dispose();
     }
-    public void refresh() {
-        loadCrmData();
+
+    public void addImageDataToRepo(byte[] imageData){
+        this.crmRepository.putImageData(imageData);
     }
+
+    public byte[] getImageDataFromRepo(){
+        return this.crmRepository.getImageData();
+    }
+
+    public List<NoteHeader> getNoteHeaders() {
+        return this.crmRepository.getNoteHeaders();
+    }
+
+    public Single<ResponseBody> uploadAttachment(AttachmentRequestDto attachmentDto) {
+        return this.crmRepository.uploadAttachment(attachmentDto);
+    }
+
 }
