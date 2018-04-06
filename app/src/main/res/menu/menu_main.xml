@@ -11,6 +11,6 @@ xmlns:app="http://schemas.android.com/tools">
         <item android:id="@+id/refreshData"
              android:title="@string/refreshData"
             appcompat:showAsAction="always"
-            android:icon="@drawable/refresh"
+            android:icon="@drawable/sync"
             />
 </menu>

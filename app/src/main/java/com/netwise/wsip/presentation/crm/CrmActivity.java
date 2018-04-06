@@ -42,7 +42,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.internal.schedulers.ImmediateThinScheduler;
+import io.reactivex.schedulers.Schedulers;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -103,12 +105,18 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
     }
 
     private void refreshData() {
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, android.R.style.Theme_Holo_Light_Dialog);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setTitle("Pobieranie danych");
         progressDialog.setMessage("Proszę czekać na pobranie danych z CRM...");
         progressDialog.show();
+        viewModel.getCrmRepository().refreshData().
+                subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        crmData -> progressDialog.dismiss(),
+                        throwable -> progressDialog.dismiss());
     }
 
 
@@ -135,7 +143,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(true);
         searchView.setLayoutParams(new ActionBar.LayoutParams(Gravity.RIGHT));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
