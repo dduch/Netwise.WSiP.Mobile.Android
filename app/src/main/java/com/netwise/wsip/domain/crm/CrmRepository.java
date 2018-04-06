@@ -15,6 +15,8 @@ public interface CrmRepository {
 
     Single<CrmData> getCrmData();
 
+    Single<CrmData> refreshData();
+
     Single<ResponseBody> uploadAttachment(AttachmentRequestDto attachmentData);
 
     void SetCredentials(CredentialsDto cred);

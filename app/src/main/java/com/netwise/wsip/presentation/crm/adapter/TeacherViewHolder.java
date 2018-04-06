@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -107,6 +108,8 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
     @Override
     public void onClick(View view) {
         this.isSelected.setChecked(true);
+        InputMethodManager imm = (InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(isSelected.getWindowToken(), 0);
     }
 
     @OnCheckedChanged(R.id.selectedCheckbox)

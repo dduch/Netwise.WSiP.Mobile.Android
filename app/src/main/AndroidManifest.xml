@@ -30,14 +30,17 @@
 
         <activity
             android:name=".presentation.login.LoginActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".presentation.fake.FakeActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.crm.CrmActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.searchable"
@@ -48,10 +51,12 @@
         </activity>
         <activity
             android:name=".presentation.attachmentSender.AttachmentSenderActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".presentation.schoolTeachers.SchoolTeachersActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
     </application>
 

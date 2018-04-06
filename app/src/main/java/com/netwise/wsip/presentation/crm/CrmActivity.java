@@ -2,6 +2,8 @@ package com.netwise.wsip.presentation.crm;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -10,11 +12,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mindorks.paracamera.Camera;
@@ -34,45 +42,46 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import io.reactivex.internal.schedulers.ImmediateThinScheduler;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class CrmActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener {
+public class CrmActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
     static final int REQUEST_IMAGE_CAPTURE = 1;
-
     private SearchView searchView = null;
-    private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private SchoolFragment schoolFragment;
     private TeacherFragement teacherFragement;
-
+    ProgressDialog progressDialog;
 
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
 
+    @BindView(R.id.tablayout)
+    TabLayout tabLayout;
+
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
+
     @Inject
     ViewModelProvider.Factory vmFactory;
+
     CrmViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, vmFactory).get(CrmViewModel.class);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        viewModel = ViewModelProviders.of(this, vmFactory).get(CrmViewModel.class);
-        observeViewModel();
-        viewPager = (ViewPager)findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -81,6 +90,27 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         finish();
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refreshData:
+                refreshData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void refreshData() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Pobieranie danych");
+        progressDialog.setMessage("Proszę czekać na pobranie danych z CRM...");
+        progressDialog.show();
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -110,6 +140,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
         return true;
     }
 
@@ -137,7 +168,6 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // NOTE: delegate the permission handling to generated method
         CrmActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
@@ -205,5 +235,17 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         }
 
         return false;
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if(!hasFocus){
+         hideKeyboard();
+        }
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 }

@@ -38,6 +38,8 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -46,7 +48,7 @@ import java.io.ByteArrayOutputStream;
  * Created by dawido on 19.03.2018.
  */
 @RuntimePermissions
-public class SchoolTeachersActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener{
+public class SchoolTeachersActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static String SCHOOL_DATA = "school";
@@ -121,6 +123,7 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
         return true;
     }
 
@@ -199,5 +202,18 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
             teacherFragement.adapter.getFilter().filter(newText);
         }
         return  true;
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean hasFocus) {
+        if(!hasFocus){
+            hideKeyboard();
+        }
+    }
+
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 }

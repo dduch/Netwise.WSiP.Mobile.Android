@@ -11,4 +11,6 @@
     <color name="black">#000000</color>
     <color name="progressInfoColor">#28c31a</color>
     <color name="lightGray">#EEEEEE</color>
+    <color name="monza">#CF000F</color>
+    <color name="detailsButton">#EA9C35</color>
 </resources>

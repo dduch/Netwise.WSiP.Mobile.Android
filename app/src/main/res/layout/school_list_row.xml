@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="13dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="13dp"
     android:layout_marginTop="5dp"
     android:clickable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -17,20 +18,28 @@
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
+        android:minHeight="60dp"
+        android:gravity="center_vertical"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="5dp"
         card_view:layout_constraintEnd_toEndOf="parent"
         card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:minHeight="60dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:gravity="center_vertical"
+            android:weightSum="12" android:baselineAligned="false">
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/checkboxLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1.1"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -42,6 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
+                    android:clickable="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -49,11 +59,11 @@
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/dataLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="9.4"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 app:layout_constraintLeft_toRightOf="@+id/checkboxLayout"
-                app:layout_constraintRight_toRightOf="parent">
+                app:layout_constraintRight_toRightOf="@+id/moreButtonLayout">
 
                 <TextView
                     android:id="@+id/school_name"
@@ -112,21 +122,30 @@
                     android:textSize="12sp"
                     app:layout_constraintTop_toBottomOf="@id/school_city" />
 
-                <ImageButton
-                    android:id="@+id/detailsButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/details"
-                    android:gravity="center_vertical"
-                    android:orientation="@+id/details"
-                    android:padding="0dp"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/moreButtonLayout"
+                android:layout_width="0dp"
+                android:layout_weight="1.5"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.design.widget.FloatingActionButton
+                android:id="@+id/detailsButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                card_view:fabSize="mini"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/conference48_2"
+                app:backgroundTint="@color/detailsButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             </android.support.constraint.ConstraintLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
-
 </android.support.constraint.ConstraintLayout>

@@ -2,12 +2,16 @@ package com.netwise.wsip.presentation.attachmentSender;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +28,10 @@ import com.netwise.wsip.presentation.crm.CrmViewModel;
 import com.netwise.wsip.presentation.dialogHelper.DialogHelper;
 import com.rey.material.widget.ProgressView;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +39,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -41,7 +49,7 @@ import okhttp3.ResponseBody;
  * Created by dawido on 15.03.2018.
  */
 
-public class AttachmentSenderActivity extends DaggerAppCompatActivity {
+public class AttachmentSenderActivity extends DaggerAppCompatActivity implements View.OnTouchListener{
     private static String ATTACHMENT_DATA = "atachment";
     private static String TAKEN_PHOTO_KEY = "photo";
     private Attachment attachmentData;
@@ -67,9 +75,13 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity {
     @BindView(R.id.progressBar)
     ProgressView progressBar;
 
+    @BindView(R.id.backgroundLayout)
+    ConstraintLayout backgroundLayout;
+
     @Inject
     ViewModelProvider.Factory vmFactory;
     CrmViewModel viewModel;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +95,9 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity {
         hideProgressControls();
         handleIntent(getIntent());
         initComboBox();
+        this.backgroundLayout.setOnTouchListener(this);
     }
+
 
     @Override
     protected void onStop() {
@@ -125,6 +139,13 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable(ATTACHMENT_DATA, attachmentDto);
         return bundle;
+    }
+
+    @OnItemSelected(R.id.attachmentType)
+    public void onAtachementTypeChange(){
+        this.attachmentName.setText(this.dropdown.getSelectedItem().toString() +
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).toString().replace('-','_').replace(':','_')
+                + ".jpg");
     }
 
     @OnClick(R.id.sendButton)
@@ -182,5 +203,14 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity {
         this.attachmentName.setEnabled(false);
         this.attachmentContent.setEnabled(false);
         this.sendAttachmentButton.setEnabled(false);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(!(view instanceof EditText)){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return true;
     }
 }

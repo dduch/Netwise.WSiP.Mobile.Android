@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGray">
+    android:background="@color/lightGray"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:id="@+id/backgroundLayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,9 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="parent"/>
-
-
+        app:layout_constraintTop_toBottomOf="parent"
+        />
 </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

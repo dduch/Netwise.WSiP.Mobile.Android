@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CRM Photo Sender</string>
-    <string name="passwordHint">Login</string>
-    <string name="usernameHint">Hasło</string>
+    <string name="passwordHint">Hasło</string>
+    <string name="usernameHint">Login</string>
     <string name="login_in">Zaloguj</string>
     <string name="remeber_me">Zapamiętaj mnie</string>
     <string name="takePhoto">Zrób zdjęcie</string>
@@ -34,4 +34,5 @@
     <string name="crm_school_entity_name">account</string>
     <string name="crm_techer_entity_name">contact</string>
     <string name="server_timeout">Błąd połączenia - serwer nie odpowiada</string>
+    <string name="refreshData">Pobierz dane z CRM</string>
 </resources>

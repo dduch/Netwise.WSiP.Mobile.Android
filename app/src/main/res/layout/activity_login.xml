@@ -5,7 +5,11 @@
     android:padding="12dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:id="@+id/backgroundLayout">
 
     <ImageView
         android:id="@+id/logo"
@@ -32,7 +36,11 @@
         app:layout_constraintBottom_toTopOf="@id/guideline"
         android:textColor="@color/Wsip_base_color"
         tools:text="Username"
-        android:maxLines="1"/>
+        android:lines="1"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+        android:inputType="textFilter"/>
 
     <EditText
         android:id="@+id/user_password"

@@ -18,6 +18,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.ResponseBody;
 
 public class CrmViewModel extends ViewModel {
+
     private CrmRepository crmRepository;
     private MutableLiveData<CrmViewState> state = new MutableLiveData<>();
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -27,6 +28,10 @@ public class CrmViewModel extends ViewModel {
         this.crmRepository = repository;
         state.setValue(CrmViewState.builder().build());
         loadCrmData();
+    }
+
+    public CrmRepository getCrmRepository() {
+        return crmRepository;
     }
 
     private void loadCrmData() {

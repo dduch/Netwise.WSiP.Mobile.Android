@@ -3,6 +3,7 @@ package com.netwise.wsip.presentation.login;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +13,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -26,6 +29,7 @@ import com.netwise.wsip.infastucture.network.CredentialsDto;
 import com.netwise.wsip.infastucture.network.ResponseError;
 import com.netwise.wsip.presentation.crm.CrmActivity;
 import com.netwise.wsip.presentation.dialogHelper.DialogHelper;
+import com.netwise.wsip.utils.UIHelper;
 import com.rey.material.widget.ProgressView;
 
 import org.reactivestreams.Subscriber;
@@ -49,7 +53,7 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 import retrofit2.http.HTTP;
 
-public class LoginActivity extends DaggerAppCompatActivity {
+public class LoginActivity extends DaggerAppCompatActivity implements View.OnTouchListener{
     private static String PREFS_NAME="PREFERENCES";
     private static String PREF_USERNAME="USERRNAME";
     private static String PREF_PASSWORD="PASSWORD";
@@ -71,6 +75,8 @@ public class LoginActivity extends DaggerAppCompatActivity {
     ProgressView progressBar;
     @BindView(R.id.login_in)
     Button loginButton;
+    @BindView(R.id.backgroundLayout)
+    ConstraintLayout backgroundLayout;
 
 
     @Override
@@ -79,10 +85,14 @@ public class LoginActivity extends DaggerAppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
         ButterKnife.bind(this);
-
+        addListenersToBackground();
         progressInfo.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         getStoredData();
+    }
+
+    private void addListenersToBackground() {
+        this.backgroundLayout.setOnTouchListener(this);
     }
 
     private void getStoredData() {
@@ -187,4 +197,13 @@ public class LoginActivity extends DaggerAppCompatActivity {
         rememberMeCheckBox.setEnabled(true);
     }
 
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(!(view instanceof EditText)){
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return true;
+    }
 }

@@ -79,6 +79,15 @@ public class RemoteCrmDataRepository implements CrmRepository {
             .doOnSuccess(crmData -> hendleReceivedData(crmData) );
     }
 
+    @Override
+    public Single<CrmData> refreshData() {
+        return dataDataSource
+                .getAllData()
+                .subscribeOn(Schedulers.io())
+                .doOnSuccess(crmData -> hendleReceivedData(crmData));
+    }
+
+
     private void hendleReceivedData(CrmData crmData){
        /* SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();

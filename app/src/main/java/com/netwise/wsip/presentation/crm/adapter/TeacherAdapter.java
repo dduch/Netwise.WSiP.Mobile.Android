@@ -16,6 +16,7 @@ import com.netwise.wsip.domain.crm.School;
 import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.presentation.crm.TeacherFragement;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +41,11 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
         this.teacherPresentationModel = teacherPresentationModel;
         this.filteredPresentationModel = teacherPresentationModel;
     }
+
     public List<Teacher> getTeacherPresentationModel(){
         return this.filteredPresentationModel;
     }
+
 
     @Override
     public int getItemCount() {
@@ -125,13 +128,14 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 filteredPresentationModel = (ArrayList<Teacher>) filterResults.values;
-                notifyDataSetChanged();
                 if(filteredPresentationModel.size() == 0){
                     parentFragment.setMessageVisibility(View.VISIBLE);
                 }
                 else if(filteredPresentationModel.size() != 0){
                     parentFragment.setMessageVisibility(View.GONE);
                 }
+                selectedPos = 0;
+                notifyDataSetChanged();
             }
         };
     }

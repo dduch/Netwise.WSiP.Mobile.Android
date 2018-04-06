@@ -3,6 +3,7 @@ package com.netwise.wsip.presentation.crm.adapter;
 /**
  * Created by dawido on 13.03.2018.
  */
+import android.app.Activity;
 import android.bluetooth.le.AdvertiseData;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.test.ServiceTestCase;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -137,11 +139,14 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder implements View.On
     @Override
     public void onClick(View view) {
         this.isSelected.setChecked(true);
+
     }
 
     @OnCheckedChanged(R.id.selectedCheckbox)
-    public void onChexkBoxChnage(){
+    public void onChexkBoxChanage(){
         setSelection();
+        InputMethodManager imm = (InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(isSelected.getWindowToken(), 0);
     }
 
     private void setSelection(){
