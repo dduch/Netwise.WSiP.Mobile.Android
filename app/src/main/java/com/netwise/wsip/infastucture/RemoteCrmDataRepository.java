@@ -58,17 +58,6 @@ public class RemoteCrmDataRepository implements CrmRepository {
 
     @Override
     public Single<CrmData> getCrmData() {
-
-/*        if(cacheCrmData == null){
-            Gson gson = new Gson();
-            String json = mPrefs.getString(USER_DATA, "");
-            CrmData obj = gson.fromJson(json, CrmData.class);
-            if(obj != null){
-                cacheCrmData = obj;
-                return Single.just(cacheCrmData);
-            }
-        }*/
-
         if (cacheCrmData != null) {
             return Single.just(cacheCrmData);
         }

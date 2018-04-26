@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
+import com.netwise.wsip.presentation.crm.CrmActivity;
 import com.netwise.wsip.presentation.crm.SchoolFragment;
 
 import java.math.BigInteger;
@@ -35,8 +36,9 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolViewHolder> implem
     private List<School> schoolPresentationModel;
     private List<School> filteredPresentationModel;
     private SchoolViewHolder schoolViewHolder;
+
     private SchoolFragment parentFragment;
-    public int selectedPos = 0;
+    private int selectedPos = -Integer.MAX_VALUE;
     Context context;
 
     public SchoolAdapter(List<School> schools, SchoolFragment parentFragment) {
@@ -47,6 +49,19 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolViewHolder> implem
     public void setSchoolPresentationModel(List<School> schoolPresentationModel) {
         this.schoolPresentationModel = schoolPresentationModel;
         this.filteredPresentationModel = schoolPresentationModel;
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
+    }
+
+    public SchoolFragment getParentFragment() {
+        return parentFragment;
+    }
+
+    public int getSelectedPos() {
+        return selectedPos;
     }
 
     public List<School> getSchoolPresentationModel(){
@@ -141,7 +156,8 @@ public class SchoolAdapter extends RecyclerView.Adapter<SchoolViewHolder> implem
                 else if(filteredPresentationModel.size() != 0){
                     parentFragment.setMessageVisibility(View.GONE);
                 }
-                selectedPos = 0;
+                selectedPos = - Integer.MAX_VALUE;
+                ((CrmActivity)getParentFragment().getActivity()).showHideTakePhotoButton(View.GONE);
                 notifyDataSetChanged();
             }
         };

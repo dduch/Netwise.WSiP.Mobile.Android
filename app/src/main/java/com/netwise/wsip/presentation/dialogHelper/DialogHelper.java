@@ -34,4 +34,14 @@ public class DialogHelper {
                     }
                 }).create().show();
     }
+    public static void displayDialog(Context context, String title, String msg){
+        new AlertDialog.Builder(context,  R.style.Theme_AppCompat_DayNight_Dialog)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(context.getResources().getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create().show();
+    }
 }

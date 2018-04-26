@@ -139,7 +139,7 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder implements View.On
     @Override
     public void onClick(View view) {
         this.isSelected.setChecked(true);
-
+        ((CrmActivity)adapter.getParentFragment().getActivity()).showHideTakePhotoButton(View.VISIBLE);
     }
 
     @OnCheckedChanged(R.id.selectedCheckbox)
@@ -154,7 +154,7 @@ public class SchoolViewHolder extends RecyclerView.ViewHolder implements View.On
             this.cardView.setCardBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.wsip_accent_color_light, null));
         }
         adapter.unselectHolder();
-        adapter.selectedPos = getAdapterPosition();
+        adapter.setSelectedPos(getAdapterPosition());
     }
 }
 

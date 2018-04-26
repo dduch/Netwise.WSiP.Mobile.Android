@@ -58,6 +58,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attachmentType"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/._-"
         android:hint="@string/attachmentName"
         android:layout_marginTop="20dp"/>
 
@@ -71,6 +72,7 @@
         android:src="@mipmap/ic_launcher"
         android:textColor="@color/Wsip_base_color"
         android:hint="@string/attachmentContentDes"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890/._-"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attachmentName"/>

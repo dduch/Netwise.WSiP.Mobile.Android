@@ -35,4 +35,7 @@
     <string name="crm_techer_entity_name">contact</string>
     <string name="server_timeout">Błąd połączenia - serwer nie odpowiada</string>
     <string name="refreshData">Pobierz dane z CRM</string>
+    <string name="refreshing_data">Trwa pobieranie danych z CRM proszę czekać...</string>
+    <string name="wait">Pobieranie danych</string>
+    <string name="defaultAttachmentExtension">.jpg</string>
 </resources>

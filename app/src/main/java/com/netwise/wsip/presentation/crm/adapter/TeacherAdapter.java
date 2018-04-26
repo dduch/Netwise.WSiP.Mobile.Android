@@ -14,7 +14,10 @@ import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
 import com.netwise.wsip.domain.crm.Teacher;
+import com.netwise.wsip.presentation.crm.CrmActivity;
+import com.netwise.wsip.presentation.crm.SchoolFragment;
 import com.netwise.wsip.presentation.crm.TeacherFragement;
+import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersActivity;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
     private List<Teacher> teacherPresentationModel;
     private List<Teacher> filteredPresentationModel;
     private TeacherFragement parentFragment;
-    public int selectedPos = 0;
+    private int selectedPos = -Integer.MAX_VALUE;
     Context context;
 
     public TeacherAdapter(List<Teacher> teachers, TeacherFragement parentFragment) {
@@ -37,9 +40,22 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
         this.parentFragment = parentFragment;
     }
 
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
+    }
+
+    public int getSelectedPos() {
+        return selectedPos;
+    }
+
+    public TeacherFragement getParentFragment() {
+        return parentFragment;
+    }
+
     public void setTeacherPresentationModel(List<Teacher> teacherPresentationModel){
         this.teacherPresentationModel = teacherPresentationModel;
         this.filteredPresentationModel = teacherPresentationModel;
+        notifyDataSetChanged();
     }
 
     public List<Teacher> getTeacherPresentationModel(){
@@ -90,7 +106,7 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
                 sectionTitle = t.fullName;
             }
         }
-        return  sectionTitle.substring(0, 1);
+        return sectionTitle.substring(0, 1);
     }
 
     @Override
@@ -134,7 +150,14 @@ public class TeacherAdapter extends RecyclerView.Adapter<TeacherViewHolder> impl
                 else if(filteredPresentationModel.size() != 0){
                     parentFragment.setMessageVisibility(View.GONE);
                 }
-                selectedPos = 0;
+                selectedPos = - Integer.MAX_VALUE;
+                if(getParentFragment().getActivity() instanceof CrmActivity){
+                    ((CrmActivity)getParentFragment().getActivity()).showHideTakePhotoButton(View.GONE);
+                }
+                else if(getParentFragment().getActivity() instanceof SchoolTeachersActivity){
+                    ((SchoolTeachersActivity)getParentFragment().getActivity()).showHideTakePhotoButton(View.GONE);
+                }
+
                 notifyDataSetChanged();
             }
         };

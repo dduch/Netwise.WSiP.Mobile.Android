@@ -18,7 +18,6 @@ public interface CrmApi {
     Single<ResponseBody> uploadAttachment(@Header("Authorization") String authHeader, @Header("Content-Type") String contentType, @Body AttachmentRequestDto attachmentDto);
 
     @FormUrlEncoded
-    @POST("/token")
+    @POST("token")
     Single<TokenDto> getToken(@Field("grant_type") String grantType, @Field("username") String userName, @Field("password") String password);
-
 }

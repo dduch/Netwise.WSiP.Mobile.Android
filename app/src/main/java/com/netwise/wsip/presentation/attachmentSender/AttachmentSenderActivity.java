@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -44,6 +45,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
+import okhttp3.internal.http.RetryAndFollowUpInterceptor;
 
 /**
  * Created by dawido on 15.03.2018.
@@ -53,6 +55,7 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
     private static String ATTACHMENT_DATA = "atachment";
     private static String TAKEN_PHOTO_KEY = "photo";
     private Attachment attachmentData;
+    private Boolean isSending = false;
 
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
@@ -98,6 +101,34 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
         this.backgroundLayout.setOnTouchListener(this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return handleBackButton(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean handleBackButton(MenuItem item){
+        if(isSending){
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isSending){
+            return;
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onStop() {
@@ -127,7 +158,6 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
         }
 
         Bundle bundle = intent.getExtras();
-
         if (bundle == null) {
             return;
         }
@@ -151,13 +181,13 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
     @OnClick(R.id.sendButton)
     public void onSendClick() {
         this.attachmentData.body = this.attachmentContent.getText().toString();
-        this.attachmentData.fileName = this.attachmentName.getText().toString();
         if(this.dropdown != null) {
             this.attachmentData.subject = this.dropdown.getSelectedItem() != null ? this.dropdown.getSelectedItem().toString() : "";
         }
         this.attachmentData.data = viewModel.getImageDataFromRepo();
         showProgressControls();
-
+        setAttachmentName();
+        isSending = true;
         AttachmentRequestDto attachmentDto = ModelMapper.mapAttachmentData(attachmentData);
         viewModel.uploadAttachment(attachmentDto)
                 .subscribeOn(Schedulers.io())
@@ -165,6 +195,13 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
                 .subscribe(
                         result -> handleSuccess(result),
                         throwable -> handleError(throwable));
+    }
+
+    private void setAttachmentName(){
+        this.attachmentData.fileName = this.attachmentName.getText().toString();
+        if(!this.attachmentData.fileName.contains(getResources().getString(R.string.defaultAttachmentExtension))){
+            this.attachmentData.fileName = this.attachmentData.fileName + getResources().getString(R.string.defaultAttachmentExtension);
+        }
     }
 
     private void handleSuccess(ResponseBody result) {
@@ -194,6 +231,7 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
         this.attachmentName.setEnabled(true);
         this.attachmentContent.setEnabled(true);
         this.sendAttachmentButton.setEnabled(true);
+        isSending = false;
     }
 
     private void showProgressControls(){
@@ -208,8 +246,14 @@ public class AttachmentSenderActivity extends DaggerAppCompatActivity implements
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(!(view instanceof EditText)){
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            try {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+            catch(NullPointerException ex)
+            {
+                ex.printStackTrace();
+            }
         }
         return true;
     }

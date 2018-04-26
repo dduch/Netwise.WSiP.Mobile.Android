@@ -2,7 +2,6 @@ package com.netwise.wsip.presentation.crm;
 
 import android.Manifest;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProvider;
@@ -12,20 +11,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
+import android.transition.Visibility;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mindorks.paracamera.Camera;
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.CameraHelper;
 import com.netwise.wsip.domain.crm.School;
@@ -33,6 +33,7 @@ import com.netwise.wsip.domain.crm.Teacher;
 import com.netwise.wsip.domain.crm.Attachment;
 import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderActivity;
 import com.netwise.wsip.presentation.crm.adapter.ViewPagerAdapter;
+import com.netwise.wsip.presentation.dialogHelper.DialogHelper;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,15 +44,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.internal.schedulers.ImmediateThinScheduler;
 import io.reactivex.schedulers.Schedulers;
 import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class CrmActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener{
+public class CrmActivity extends DaggerAppCompatActivity implements SearchView.OnQueryTextListener, View.OnFocusChangeListener, ViewPager.OnPageChangeListener {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private SearchView searchView = null;
     private ViewPagerAdapter adapter;
@@ -67,6 +65,9 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+
+    @BindView(R.id.take_photoButton)
+    FloatingActionButton takePhotoButton;
 
     @Inject
     ViewModelProvider.Factory vmFactory;
@@ -85,6 +86,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        this.takePhotoButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -99,24 +101,64 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
             case R.id.refreshData:
                 refreshData();
                 return true;
+            case android.R.id.home:
+                return handleBackButton(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private boolean handleBackButton(MenuItem item){
+        if(searchView.getQuery().toString().length() > 0){
+            searchView.setQuery("", true);
+            return true;
+        }
+        else{
+             return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void refreshData() {
-        progressDialog = new ProgressDialog(this, android.R.style.Theme_Holo_Light_Dialog);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(true);
-        progressDialog.setTitle("Pobieranie danych");
-        progressDialog.setMessage("Proszę czekać na pobranie danych z CRM...");
-        progressDialog.show();
-        viewModel.getCrmRepository().refreshData().
-                subscribeOn(Schedulers.io())
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.progress, null);
+        AlertDialog dialog = new AlertDialog.Builder(CrmActivity.this, R.style.Theme_AppCompat_DayNight_Dialog)
+                .setTitle(getResources().getString(R.string.wait))
+                .setView(dialogView)
+                .create();
+
+        viewModel.getCrmRepository().refreshData()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(
+                        x ->
+                    {
+                        turnOffControls(dialog);
+                        dialog.show();
+                        dialog.getWindow().setLayout(700,600);
+                    })
                 .subscribe(
-                        crmData -> progressDialog.dismiss(),
-                        throwable -> progressDialog.dismiss());
+                    crmData ->
+                    {
+
+                        schoolFragment.adapter.setSchoolPresentationModel(crmData.getSchools());
+                        teacherFragement.adapter.setTeacherPresentationModel(crmData.getTeachers());
+                        turnOnControls(dialog);
+                        dialog.dismiss();
+                    },
+                    throwable -> {
+                        turnOnControls(dialog);
+                        dialog.dismiss();
+                    });
+    }
+
+    private void turnOnControls(AlertDialog dialog) {
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void turnOffControls(AlertDialog dialog) {
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,  WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 
@@ -126,7 +168,9 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         teacherFragement = new TeacherFragement();
         adapter.addFragment(schoolFragment, getResources().getString(R.string.schoolTab));
         adapter.addFragment(teacherFragement, getResources().getString(R.string.teacherTab));
+        viewPager.addOnPageChangeListener(this);
         viewPager.setAdapter(adapter);
+
     }
 
     private void observeViewModel() {
@@ -149,6 +193,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setOnQueryTextListener(this);
         searchView.setOnQueryTextFocusChangeListener(this);
+        searchView.setOnFocusChangeListener(this);
         return true;
     }
 
@@ -163,15 +208,37 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         CrmActivityPermissionsDispatcher.showCameraWithPermissionCheck(this);
     }
 
+    public void showHideTakePhotoButton(int visibility){
+        this.takePhotoButton.setVisibility(visibility);
+    }
 
     @NeedsPermission(Manifest.permission.CAMERA)
     void showCamera() {
-        try {
-            CameraHelper.getCamera(this).takePicture();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        int currentTab = viewPager.getCurrentItem();
+        int itemsCount =0;
+        if(currentTab == 0){
+            if(schoolFragment != null){
+                itemsCount = schoolFragment.adapter.getItemCount();
+            }
+        }
+        else if(currentTab == 1) {
+            if(teacherFragement != null){
+                itemsCount= teacherFragement.adapter.getItemCount();
+            }
+        }
+        if(itemsCount>0) {
+            try {
+                CameraHelper.getCamera(this).takePicture();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            DialogHelper.displayDialog(this, "Nie wybrano rekordu", "Prosze wybrać rekord przed zrobieniem zdjęcia");
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -184,7 +251,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageBitmap = CameraHelper.getCamera().getCameraBitmap();
             if(imageBitmap != null){
-                Attachment attachementData = getAttchmentData();
+                Attachment attachementData = getAttachmentData();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
@@ -198,12 +265,12 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         }
     }
 
-    private Attachment getAttchmentData(){
+    private Attachment getAttachmentData(){
         Attachment attachmentData = new Attachment();
         int currentTab = viewPager.getCurrentItem();
         if(currentTab == 0){
             if(schoolFragment != null){
-                int selectedSchool = schoolFragment.adapter.selectedPos;
+                int selectedSchool = schoolFragment.adapter.getSelectedPos();
                 School school = schoolFragment.adapter.getSchoolPresentationModel().get(selectedSchool);
                 attachmentData.crmEntityName = getResources().getString(R.string.crm_school_entity_name);
                 attachmentData.id = school.itemId;
@@ -211,7 +278,7 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         }
         else if(currentTab == 1) {
             if(teacherFragement != null){
-                int selectedTeacher = teacherFragement.adapter.selectedPos;
+                int selectedTeacher = teacherFragement.adapter.getSelectedPos();
                 Teacher teacher = teacherFragement.adapter.getTeacherPresentationModel().get(selectedTeacher);
                 attachmentData.crmEntityName = getResources().getString(R.string.crm_techer_entity_name);
                 attachmentData.id = teacher.itemId;
@@ -252,8 +319,33 @@ public class CrmActivity extends DaggerAppCompatActivity implements SearchView.O
         }
     }
 
+
+
     private void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+        }
+        catch(NullPointerException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        searchView.setQuery("", false);
+        showHideTakePhotoButton(View.GONE);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

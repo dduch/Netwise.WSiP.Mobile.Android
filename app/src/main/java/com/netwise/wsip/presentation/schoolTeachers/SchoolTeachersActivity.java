@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -25,6 +26,7 @@ import com.netwise.wsip.presentation.attachmentSender.AttachmentSenderActivity;
 import com.netwise.wsip.presentation.crm.CrmViewModel;
 import com.netwise.wsip.presentation.crm.TeacherFragement;
 import com.netwise.wsip.presentation.crm.adapter.ViewPagerAdapter;
+import com.netwise.wsip.presentation.dialogHelper.DialogHelper;
 
 import javax.inject.Inject;
 
@@ -38,6 +40,7 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 
 import android.support.v7.widget.SearchView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -60,6 +63,9 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
 
+    @BindView(R.id.take_photoButton)
+    FloatingActionButton takePhotoButton;
+
     @Inject
     ViewModelProvider.Factory vmFactory;
     CrmViewModel viewModel;
@@ -78,6 +84,7 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+        takePhotoButton.setVisibility(View.GONE);
         handleIntent(getIntent());
     }
 
@@ -128,6 +135,26 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return handleBackButton(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean handleBackButton(MenuItem item){
+        if(searchView.getQuery().toString().length() > 0){
+            searchView.setQuery("", true);
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         viewModel.clear();
@@ -140,12 +167,22 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
 
 
     @NeedsPermission(Manifest.permission.CAMERA)
-    public void showCamera() {
-        try {
-            CameraHelper.getCamera(this).takePicture();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        public void showCamera() {
+            int teachersCount =0;
+            teachersCount = teacherFragement.adapter.getItemCount();
+            if(teachersCount > 0) {
+                try {
+
+                    CameraHelper.getCamera(this).takePicture();
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                DialogHelper.displayDialog(this, "Nie wybrano rekordu", "Prosze wybrać rekord przed zrobieniem zdjęcia");
+            }
     }
 
     @Override
@@ -160,7 +197,7 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageBitmap = CameraHelper.getCamera().getCameraBitmap();
             if(imageBitmap != null){
-                Attachment attatchment = getAttchmentData();
+                Attachment attatchment = getAttachmentData();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 viewModel.addImageDataToRepo(stream.toByteArray().clone());
@@ -173,10 +210,11 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
         }
     }
 
-    private Attachment getAttchmentData() {
+    private Attachment getAttachmentData() {
         Attachment attachmentData = new Attachment();
         if (teacherFragement != null) {
-            int selectedTeacher = teacherFragement.adapter.selectedPos;
+
+            int selectedTeacher = teacherFragement.adapter.getSelectedPos();
             Teacher teacher = teacherFragement.adapter.getTeacherPresentationModel().get(selectedTeacher);
             attachmentData.crmEntityName = getResources().getString(R.string.crm_techer_entity_name);
             attachmentData.id = teacher.itemId;
@@ -211,9 +249,18 @@ public class SchoolTeachersActivity extends DaggerAppCompatActivity implements S
         }
     }
 
+    public void showHideTakePhotoButton(int visibility){
+        this.takePhotoButton.setVisibility(visibility);
+    }
 
     private void hideKeyboard(){
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        catch(NullPointerException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }

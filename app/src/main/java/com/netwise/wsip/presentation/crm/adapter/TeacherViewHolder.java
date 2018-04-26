@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.netwise.wsip.R;
 import com.netwise.wsip.domain.crm.School;
 import com.netwise.wsip.domain.crm.Teacher;
+import com.netwise.wsip.presentation.crm.CrmActivity;
+import com.netwise.wsip.presentation.schoolTeachers.SchoolTeachersActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +49,12 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
     @BindView(R.id.teacher_province)
     TextView province;
 
+    @BindView(R.id.email)
+    TextView email;
+
+    @BindView(R.id.mobilePhone)
+    TextView mobilePhone;
+
     @BindView(R.id.selectedCheckbox)
     CheckBox isSelected;
 
@@ -73,6 +81,8 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
         city.setText(teacherModel.city);
         postcode.setText(teacherModel.postalCodeName);
         province.setText(teacherModel.provinceName);
+        email.setText(teacherModel.email);
+        mobilePhone.setText(teacherModel.mobilePhone);
     }
 
     public void setVisibility(){
@@ -103,6 +113,14 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
         if(TextUtils.isEmpty(province.getText())){
             province.setVisibility(View.GONE);
         }
+
+        if(TextUtils.isEmpty(email.getText())){
+            email.setVisibility(View.GONE);
+        }
+
+        if(TextUtils.isEmpty(mobilePhone.getText())){
+            mobilePhone.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -110,10 +128,17 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
         this.isSelected.setChecked(true);
         InputMethodManager imm = (InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(isSelected.getWindowToken(), 0);
+
+        if(adapter.getParentFragment().getActivity() instanceof CrmActivity){
+            ((CrmActivity)adapter.getParentFragment().getActivity()).showHideTakePhotoButton(View.VISIBLE);
+        }
+        else if(adapter.getParentFragment().getActivity() instanceof SchoolTeachersActivity){
+            ((SchoolTeachersActivity)adapter.getParentFragment().getActivity()).showHideTakePhotoButton(View.VISIBLE);
+        }
     }
 
     @OnCheckedChanged(R.id.selectedCheckbox)
-    public void onChexkBoxChnage(){
+    public void onCheckBoxChnage(){
         setSelection();
     }
 
@@ -122,6 +147,6 @@ public class TeacherViewHolder extends RecyclerView.ViewHolder implements View.O
             this.cardView.setCardBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.wsip_accent_color_light, null));
         }
         adapter.unselectHolder();
-        adapter.selectedPos = getAdapterPosition();
+        adapter.setSelectedPos(getAdapterPosition());
     }
 }

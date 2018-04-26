@@ -153,25 +153,27 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnTou
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        crmData -> handleDownloadingSuccess(crmData),
-                        throwable -> handleDownloadingError(throwable));
-    }
-
-    private void handleTokenError(Throwable error){
-        hideLogingControls();
-        String message = "";
-        if(SocketTimeoutException.class.isInstance(error)){
-            message = getResources().getString(R.string.server_timeout);
+                    crmData -> handleDownloadingSuccess(crmData),
+                    throwable -> handleDownloadingError(throwable));
         }
-        if(HttpException.class.isInstance(error)){
+
+        private void handleTokenError(Throwable error){
+            hideLogingControls();
+            String message = "";
+            if(SocketTimeoutException.class.isInstance(error)){
+                message = getResources().getString(R.string.server_timeout);
+                DialogHelper.displayErrorDialog(this, message);
+            }
+            if(HttpException.class.isInstance(error)){
             ResponseError errorMsg = null;
             try {
                 errorMsg = new Gson().fromJson(((HttpException)error).response().errorBody().string(), ResponseError.class);
                 message = errorMsg.error_description;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 message = getResources().getString(R.string.error_login);
                 e.printStackTrace();
             }
+                DialogHelper.displayErrorDialog(this, message);
         }
 
         DialogHelper.displayErrorDialog(this, message);
@@ -201,8 +203,14 @@ public class LoginActivity extends DaggerAppCompatActivity implements View.OnTou
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(!(view instanceof EditText)){
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            try {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+            catch(NullPointerException ex)
+            {
+                ex.printStackTrace();
+            }
         }
         return true;
     }
